@@ -1,15 +1,21 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'SHACL validation'
+description: 'This action will validate RDF graphs in `.ttl` format using the [TopQuadrant SHACL API](https://github.com/TopQuadrant/shacl), which passed [100% of the tests](https://w3c.github.io/data-shapes/data-shapes-test-suite/#validate-rdf-data-tests) related to RDF validation.'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  validation-data: 
+    description: 'RDF data in .ttl format to validate'
     required: true
     default: 'World'
+  validation-rules:
+    description: 'RDF data in .ttl format containing the constraints/SHACL rules'
+    required: false
+    default: 'Dunno'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  validation-status:
+    description: 'Validation status: failed or passed'
+  validation-report:
+    description: 'Detailed report in .ttl format with the validation results'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/sdsc-ord/shacl:1.4.2_b8973a6'
   args:
-    - ${{ inputs.who-to-greet }}
+    - validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }}
