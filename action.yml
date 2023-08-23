@@ -9,6 +9,9 @@ inputs:
     description: 'RDF data in .ttl format containing the constraints/SHACL rules'
     required: false
     default: 'Test'
+  github_token:
+    description: 'GITHUB_TOKEN'
+    default: '${{ secrets.GITHUB_TOKEN }}'
 outputs:
   validation-status:
     description: 'Validation status: failed or passed'
