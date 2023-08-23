@@ -22,7 +22,6 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-      secrets:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Docker Run
       id: docker-run
