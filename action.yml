@@ -4,10 +4,10 @@ inputs:
   validation-data: 
     description: 'RDF data in .ttl format to validate'
     required: true
-    default: 'World'
   validation-rules:
     description: 'RDF data in .ttl format containing the constraints/SHACL rules'
     required: false
+    default: 'None'
   github_token:
     description: 'GITHUB_TOKEN'
     required: true
@@ -26,8 +26,11 @@ runs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ inputs.github_token }}
-    - name: Docker Run
-      id: docker-run
+    - if: ${{ inputs.validation-rules == 'None' }}
+      shell: bash
+      run: |
+        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/sdsc-ord/shacl:latest validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }})" >> "$GITHUB_OUTPUT"
+    - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
       run: |
         echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ inputs.validation-data }}:${{ inputs.validation-data }} -v ${{ inputs.validation-rules }}:${{ inputs.validation-rules }} ghcr.io/sdsc-ord/shacl:latest validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }})" >> "$GITHUB_OUTPUT"
