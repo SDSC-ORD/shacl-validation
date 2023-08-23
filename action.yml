@@ -29,8 +29,8 @@ runs:
     - if: ${{ inputs.validation-rules == 'None' }}
       shell: bash
       run: |
-        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ inputs.validation-data }}:/${{ inputs.validation-data }} ghcr.io/sdsc-ord/shacl:latest validate -datafile /${{ inputs.validation-data }} -shapesfile /${{ inputs.validation-rules }})" >> "$GITHUB_OUTPUT"
+        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)" >> "$GITHUB_OUTPUT"
     - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
       run: |
-        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ inputs.validation-data }}:/${{ inputs.validation-data }} -v ${{ inputs.validation-rules }}:/${{ inputs.validation-rules }} ghcr.io/sdsc-ord/shacl:latest validate -datafile /${{ inputs.validation-data }} -shapesfile /${{ inputs.validation-rules }})" >> "$GITHUB_OUTPUT"
+        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ inputs.validation-data }}:/data/validation-data.ttl -v ${{ inputs.validation-rules }}:/data/validation-rules.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl -shapesfile /data/validation-rules.ttl)" >> "$GITHUB_OUTPUT"
