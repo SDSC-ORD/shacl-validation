@@ -27,9 +27,17 @@ runs:
         username: ${{ github.actor }}
         password: ${{ inputs.github_token }}
     - if: ${{ inputs.validation-rules == 'None' }}
+      id: docker-datafile
       shell: bash
       run: |
-        docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl"
+        {
+          echo '$REPORT<<EOF'
+          echo "$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)"
+          echo EOF
+        } >> "$GITHUB_ENV"
+    - name: validation-report-datafile
+      needs: docker-datafile
+      run: echo $REPORT
     - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
       run: |
