@@ -31,4 +31,4 @@ runs:
       id: docker-run
       shell: bash
       run: |
-        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock sdsc-ord/shacl:1.4.2_b8973a6 validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }}" >> "$GITHUB_OUTPUT"
+        echo "validation_report=$(docker run -v /var/run/docker.sock:/var/run/docker.sock sdsc-ord/shacl:1.4.2_b8973a6 validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }})" >> "$GITHUB_OUTPUT"
