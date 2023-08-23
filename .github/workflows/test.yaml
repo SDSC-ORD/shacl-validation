@@ -20,6 +20,3 @@ jobs:
         uses: ./
         with:
           validation-data: assets/data-incorrect.ttl
-        secrets: 
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
