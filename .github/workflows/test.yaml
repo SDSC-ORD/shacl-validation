@@ -1,6 +1,10 @@
 name: Test GHA
  
-on: push
+on:
+  push:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
 
 jobs:
   test-correct:
@@ -12,9 +16,6 @@ jobs:
         uses: ./
         with:
           validation-data: assets/data-correct.ttl
-        secrets: 
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Invalid data
         uses: ./
         with:
