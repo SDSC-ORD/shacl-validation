@@ -30,6 +30,12 @@ runs:
       shell: bash
       run: |
         delimiter="$(openssl rand -hex 8)"
+        docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)
+        status=$?
+        if $status; then
+          echo "Validation error!"
+          exit 1
+        fi
         {
           echo "REPORT<<${delimiter}"
           echo "$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)"
