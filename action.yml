@@ -34,7 +34,7 @@ runs:
           echo "$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)"
           echo EOF
         } >> "$GITHUB_ENV"
-        echo $REPORT
+        echo {{ env.REPORT }}
     - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
       run: |
