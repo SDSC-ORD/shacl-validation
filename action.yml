@@ -31,9 +31,9 @@ runs:
       run: |
         delimiter="$(openssl rand -hex 8)"
         {
-          echo 'REPORT<<${delimiter}'
+          echo "REPORT<<${delimiter}"
           echo "$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl)"
-          echo ${delimiter}
+          echo "${delimiter}"
         } >> "$GITHUB_ENV"
     - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
