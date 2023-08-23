@@ -33,11 +33,4 @@ runs:
     - if: ${{ inputs.validation-rules != 'None' }}
       shell: bash
       run: |
-        {
-          echo 'message<<EOF'
-          echo "$(docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl -v ${{ github.workspace }}/${{ inputs.validation-rules }}:/data/validation-rules.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl -shapesfile /data/validation-rules.ttl)"
-          echo EOF
-        } >> "$GITHUB_OUTPUT"
-    - name: post-report
-      shell: bash
-      run: echo $REPORT
+        docker run -v /var/run/docker.sock:/var/run/docker.sock -v ${{ github.workspace }}/${{ inputs.validation-data }}:/data/validation-data.ttl -v ${{ github.workspace }}/${{ inputs.validation-rules }}:/data/validation-rules.ttl ghcr.io/sdsc-ord/shacl:latest validate -datafile /data/validation-data.ttl -shapesfile /data/validation-rules.ttl
