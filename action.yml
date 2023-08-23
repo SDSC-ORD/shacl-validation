@@ -12,11 +12,6 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
     default: '${{ github.token }}'
-outputs:
-  validation-status:
-    description: 'Validation status: failed or passed'
-  validation-report:
-    description: 'Detailed report in .ttl format with the validation results'
 runs:
   using: 'composite'
   steps:
