@@ -8,14 +8,23 @@ inputs:
   validation-rules:
     description: 'RDF data in .ttl format containing the constraints/SHACL rules'
     required: false
-    default: 'Dunno'
+    default: 'Test'
 outputs:
   validation-status:
     description: 'Validation status: failed or passed'
   validation-report:
     description: 'Detailed report in .ttl format with the validation results'
 runs:
-  using: 'docker'
-  image: 'ghcr.io/sdsc-ord/shacl:1.4.2_b8973a6'
-  args:
-    - validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }}
+  using: 'composite'
+  steps:
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Docker Run
+      id: docker-run
+      shell: bash
+      run: |
+        echo "validation_report=$(docker run -v "/var/run/docker.sock":"/var/run/docker.sock" sdsc-ord/shacl:1.4.2_b8973a6 validate -datafile ${{ inputs.validation-data }} -shapesfile ${{ inputs.validation-rules }}" >> "$GITHUB_OUTPUT"
